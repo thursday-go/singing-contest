@@ -17,6 +17,17 @@ No, because we don't have enough users to require any form of scaling yet. But, 
 
 ## Developer Notes
 
-```
+```sh
 go run cmd/competition/main.go
+
+# in another terminal
+curl localhost:8000/
+```
+
+```sh
+go mod vendor
+docker-compose up --build
+
+# in another terminal
+curl localhost:8080/contestants
 ```
