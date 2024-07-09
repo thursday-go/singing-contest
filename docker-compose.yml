@@ -17,10 +17,15 @@ services:
     build:
       context: ./cmd/contestants
       dockerfile: Dockerfile
+    environment:
+      DB_HOST: contestants-db
+      DB_PORT: 5432
+      DB_USER: userone
+      DB_PASSWORD: secrets
+      DB_NAME: contestants_db
+      GRAPHQL_SERVICENAME: contestants-server
     ports:
       - "8080:8000"
-    environment:
-      - GRAPHQL_SERVICENAME=contestants-server
     depends_on:
       - "contestants-db"
 volumes:
