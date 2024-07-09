@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  contestants-db:
+    image: postgres:14
+    container_name: postgres_container
+    restart: always
+    environment:
+      POSTGRES_USER: userone
+      POSTGRES_PASSWORD: secrets
+      POSTGRES_DB: contestants_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  contestants-server:
+    build:
+      context: ./cmd/contestants
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8000"
+    environment:
+      - GRAPHQL_SERVICENAME=contestants-server
+    depends_on:
+      - "contestants-db"
+volumes:
+  postgres_data:

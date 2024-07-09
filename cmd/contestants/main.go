@@ -10,6 +10,6 @@ import (
 func main() {
     http.HandleFunc("/contestants", handlers.GetContestants)
 
-    log.Println("Starting server on :8001")
-    log.Fatal(http.ListenAndServe(":8001", nil))
+    log.Println("Starting server on :8000")
+    log.Fatal(http.ListenAndServe(":8000", nil))
 }
