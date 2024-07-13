@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-    "contestants-service/models"
+	"contestants-service/models"
 
 	_ "github.com/lib/pq"
 )
@@ -46,26 +46,26 @@ func CloseDB() {
 }
 
 func FetchContestantsFromDB() ([]models.Contestant, error) {
-    rows, err := db.Query("SELECT id, name, location FROM contestants")
-    if err != nil {
-        return nil, err
-    }
-    defer rows.Close()
+	rows, err := db.Query("SELECT id, name, location FROM contestants")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
 
-    var contestants []models.Contestant
-    for rows.Next() {
-        var c models.Contestant
-        if err := rows.Scan(&c.ID, &c.Name, &c.Location); err != nil {
-            return nil, err
-        }
-        contestants = append(contestants, c)
-    }
+	var contestants []models.Contestant
+	for rows.Next() {
+		var c models.Contestant
+		if err := rows.Scan(&c.ID, &c.Name, &c.Location); err != nil {
+			return nil, err
+		}
+		contestants = append(contestants, c)
+	}
 
-    if err = rows.Err(); err != nil {
-        return nil, err
-    }
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
 
-    return contestants, nil
+	return contestants, nil
 }
 
 func createTable() {
