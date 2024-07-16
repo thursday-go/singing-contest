@@ -1,0 +1,9 @@
+{{define "new-game"}}
+<li id="game-{{.ID}}" class="flex gap-2">
+  <a class="underline" href="/games/{{.ID}}/">{{.Name}}</a>
+  <button hx-delete="/games/{{.ID}}/" hx-target="#game-{{.ID}}" hx-swap="outerHTML">
+    Delete
+  </button>
+</li>
+<li class="hidden" id="game-new"></li>
+{{end}}
