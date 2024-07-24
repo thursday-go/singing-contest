@@ -1,8 +1,7 @@
 # singing-contest
 
 - [x] Run something that serves
-- [x] Use docker-compose
-- [x] Add a database (postgresql) to a server
+- [x] Add a database (sqllite) to a server
 - [x] Implement a service: lists all contestants
 - [ ] Add user authentication
 - [ ] Add a service: receive voting result and show
@@ -11,23 +10,21 @@
 - [ ] Build frontend
 - [ ] Deploy
 
-## are microservices the right solution for you?
+# Prerequisites
 
-No, because we don't have enough users to require any form of scaling yet. But, we are going to do it anyways -- for various reasons.
+## Golang 1.22.0
 
-## Developer Notes
+# Build
 
-```sh
-go run cmd/competition/main.go
-
-# in another terminal
-curl localhost:8000/
+```bash
+go build
 ```
 
-```sh
-go mod vendor
-docker-compose up --build
-
-# in another terminal
-curl localhost:8080/contestants
+# Run
 ```
+./singing-contest
+```
+
+# View
+
+Navigate to `http://localhost:8080/`
