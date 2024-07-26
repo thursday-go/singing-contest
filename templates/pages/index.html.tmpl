@@ -6,27 +6,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/htmx.org@2.0.1" integrity="sha384-QWGpdj554B4ETpJJC9z+ZHJcA/i59TyjxEPXiiUgN2WmTyV5OEZWCD6gQhgkdpB/" crossorigin="anonymous"></script>
+  <script>
+    tailwind.config = {
+      plugins: [
+        require('@tailwindcss/forms'),
+      ]
+    }
+  </script>
   <title>Singing Contest</title>
 </head>
-<body>
-  <h1>Singing Contest</h1>
-  <hr />
-  <form hx-post="/games/new/" hx-target="#game-new" hx-swap="outerHTML">
-    <input type="text" name="name" placeholder="Game name" required />
-    <button type="submit">Create</button>
-  </form>
-  <hr />
-  <ul class="list-disc list-inside">
-    {{range .}}
-    <li id="game-{{.ID}}" class="flex gap-2">
-      <a class="underline" href="/games/{{.ID}}/">{{.Name}}</a>
-      <button hx-delete="/games/{{.ID}}/" hx-target="#game-{{.ID}}" hx-swap="outerHTML">
-        Delete
-      </button>
-    </li>
-    {{end}}
-    <li class="hidden" id="game-new"></li>
-  </ul>
+<body class="h-full">
+  <main class="container mx-auto mt-12 px-5 justify-center">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <h1 class="text-3xl font-bold mb-8">Singing Contest</h1>
+      <form hx-post="/games/new/" hx-target="#game-new" hx-swap="outerHTML">
+        <div class="relative">
+          <input type="text" name="name" class="block w-full p-4 text-sm text-gray-200 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="Game name" required />
+          <button type="submit" class="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2">Create</button>
+        </div>
+      </form>
+      <ul class="list-disc list-inside mt-4">
+        {{range .}}
+        <li id="game-{{.ID}}" class="flex gap-2 py-2 px-3">
+          <a class="font-medium underline" href="/games/{{.ID}}/">{{.Name}}</a>
+          <button hx-delete="/games/{{.ID}}/" hx-target="#game-{{.ID}}" hx-swap="outerHTML" class="py-1 px-2 font-normal text-sm text-gray-900 focus:outline-none bg-white rounded-md border border-gray-200 hover:bg-gray-100 hover:text-red-700">
+            Delete
+          </button>
+        </li>
+        {{end}}
+        <li class="hidden" id="game-new"></li>
+      </ul>
+    </div>
+  </main>
 </body>
 </html>
 {{end}}
