@@ -10,21 +10,27 @@
 - [ ] Build frontend
 - [ ] Deploy
 
-# Prerequisites
+## Prerequisites
 
-## Golang 1.22.0
+**Golang 1.22.0**
 
-# Build
+## Build
 
 ```bash
 go build
 ```
 
-# Run
+## Run
 ```
 ./singing-contest
 ```
 
-# View
+## View
 
 Navigate to `http://localhost:8080/`
+
+## How to contribute
+
+- Ask collaboration access to the `#thursday-go` channel in the Gophers slack group.
+- Add a pull request always (to track the changes made).
+- Merge your PR after someone approves (to give chances to review for others).
