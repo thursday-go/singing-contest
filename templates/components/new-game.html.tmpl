@@ -1,7 +1,7 @@
 {{define "new-game"}}
-<li id="game-{{.ID}}" class="flex gap-2">
-  <a class="underline" href="/games/{{.ID}}/">{{.Name}}</a>
-  <button hx-delete="/games/{{.ID}}/" hx-target="#game-{{.ID}}" hx-swap="outerHTML">
+<li id="game-{{.ID}}" class="flex gap-2 py-2 px-3">
+  <a class="font-medium underline" href="/games/{{.ID}}/">{{.Name}}</a>
+  <button hx-delete="/games/{{.ID}}/" hx-target="#game-{{.ID}}" hx-swap="outerHTML" class="py-1 px-2 font-normal text-sm text-gray-900 focus:outline-none bg-white rounded-md border border-gray-200 hover:bg-gray-100 hover:text-red-700">
     Delete
   </button>
 </li>
