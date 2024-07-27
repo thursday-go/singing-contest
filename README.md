@@ -17,7 +17,7 @@
 ## Build
 
 ```bash
-go build -o singing-contest ./cmd
+go build -o singing-contest
 ```
 
 ## Run
