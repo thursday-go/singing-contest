@@ -1,100 +1,18 @@
 package main
 
 import (
-	"crypto/rand"
 	"database/sql"
-	"encoding/hex"
+	"fmt"
 	"html/template"
 	"net/http"
 
-	_ "modernc.org/sqlite"
+	"singing-contest/models"
 )
 
 const (
 	dbPath  = ":memory:"
 	svrPath = ":8080"
 )
-
-func initDB(db *sql.DB) error {
-	queries := []string{
-		"CREATE TABLE games (id TEXT PRIMARY KEY, name TEXT);",
-		"INSERT INTO games (id, name) VALUES ('abc123', 'First Game');",
-		"INSERT INTO games (id, name) VALUES ('def456', 'Second Game');",
-		"INSERT INTO games (id, name) VALUES ('ghi789', 'Third Game');",
-	}
-	for _, q := range queries {
-		if _, err := db.Exec(q); err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-func randomId(n int) string {
-	b := make([]byte, n)
-	if _, err := rand.Read(b); err != nil {
-		panic(err)
-	}
-	return hex.EncodeToString(b)
-}
-
-type game struct {
-	ID   string
-	Name string
-}
-
-func loadGameById(db *sql.DB, id string) (*game, error) {
-	var g game
-	q := "SELECT id, name FROM games WHERE id = ?;"
-	err := db.QueryRow(q, id).Scan(&g.ID, &g.Name)
-	switch {
-	case err == sql.ErrNoRows:
-		return nil, nil
-	case err != nil:
-		return nil, err
-	default:
-		return &g, nil
-	}
-}
-
-func loadGames(db *sql.DB) ([]game, error) {
-	q := "SELECT id, name FROM games;"
-	rows, err := db.Query(q)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-
-	var gs []game
-	for rows.Next() {
-		var g game
-		if err := rows.Scan(&g.ID, &g.Name); err != nil {
-			return nil, err
-		}
-		gs = append(gs, g)
-	}
-	return gs, nil
-}
-
-func createGame(db *sql.DB, name string) (game, error) {
-	g := game{
-		ID:   randomId(3),
-		Name: name,
-	}
-	q := "INSERT INTO games (id, name) VALUES (?, ?);"
-	if _, err := db.Exec(q, g.ID, g.Name); err != nil {
-		return game{}, err
-	}
-	return g, nil
-}
-
-func deleteGameByID(db *sql.DB, id string) error {
-	q := "DELETE FROM games WHERE id = ?;"
-	if _, err := db.Exec(q, id); err != nil {
-		return err
-	}
-	return nil
-}
 
 func main() {
 	// Open an in-memory SQLite database
@@ -105,7 +23,7 @@ func main() {
 	defer db.Close()
 
 	// Add some fake data
-	if err := initDB(db); err != nil {
+	if err := models.InitDB(db); err != nil {
 		panic(err)
 	}
 
@@ -121,7 +39,7 @@ func main() {
 	// Add some handlers
 	mux.HandleFunc("GET /{$}", func(w http.ResponseWriter, r *http.Request) {
 		// Load the games
-		gs, err := loadGames(db)
+		gs, err := models.LoadGames(db)
 		if err != nil {
 			panic(err)
 		}
@@ -134,7 +52,7 @@ func main() {
 		gname := r.FormValue("name")
 
 		// Create it in the DB
-		g, err := createGame(db, gname)
+		g, err := models.CreateGame(db, gname)
 		if err != nil {
 			panic(err)
 		}
@@ -148,7 +66,7 @@ func main() {
 		gid := r.PathValue("gameid")
 
 		// Load the game from the db
-		g, err := loadGameById(db, gid)
+		g, err := models.LoadGameById(db, gid)
 		if err != nil {
 			panic(err)
 		}
@@ -168,7 +86,7 @@ func main() {
 		gid := r.PathValue("gameid")
 
 		// Delete the game from the db
-		if err := deleteGameByID(db, gid); err != nil {
+		if err := models.DeleteGameByID(db, gid); err != nil {
 			panic(err)
 		}
 
@@ -177,6 +95,7 @@ func main() {
 	})
 
 	// Run the server
+	fmt.Println("Starting server", svrPath)
 	if err := http.ListenAndServe(svrPath, mux); err != nil {
 		panic(err)
 	}
