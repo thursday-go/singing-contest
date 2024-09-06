@@ -1,9 +1,10 @@
 package models
 
 import (
-	"database/sql"
 	"crypto/rand"
+	"database/sql"
 	"encoding/hex"
+	"errors"
 
 	_ "modernc.org/sqlite"
 )
@@ -18,7 +19,7 @@ func LoadGameById(db *sql.DB, id string) (*Game, error) {
 	q := "SELECT id, name FROM games WHERE id = ?;"
 	err := db.QueryRow(q, id).Scan(&g.ID, &g.Name)
 	switch {
-	case err == sql.ErrNoRows:
+	case errors.Is(err, sql.ErrNoRows):
 		return nil, nil
 	case err != nil:
 		return nil, err
